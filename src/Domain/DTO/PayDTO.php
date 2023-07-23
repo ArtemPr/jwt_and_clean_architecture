@@ -6,6 +6,9 @@ use JMS\Serializer\Annotation as Serializer;
 
 class PayDTO
 {
+    #[Serializer\Type("string")]
+    public ?string $orderId;
+
     #[Serializer\Type("float")]
     public ?float $sum;
 
@@ -20,7 +23,4 @@ class PayDTO
 
     #[Serializer\Type("string")]
     public ?string $product;
-
-    #[Serializer\Type("int")]
-    public ?int $globalId;
 }

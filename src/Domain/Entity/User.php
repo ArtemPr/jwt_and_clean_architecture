@@ -22,6 +22,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $name = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $success_url = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $fail_url = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $bankLogin = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $bankPassword = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $driver = null;
+
     /**
      * @var string The hashed password
      */
@@ -43,6 +61,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->username = $username;
 
         return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function getSuccessUrl(): ?string
+    {
+        return $this->success_url;
+    }
+
+    public function setSuccessUrl(?string $success_url): void
+    {
+        $this->success_url = $success_url;
+    }
+
+    public function getFailUrl(): ?string
+    {
+        return $this->fail_url;
+    }
+
+    public function setFailUrl(?string $fail_url): void
+    {
+        $this->fail_url = $fail_url;
+    }
+
+    public function getBankLogin(): ?string
+    {
+        return $this->bankLogin;
+    }
+
+    public function setBankLogin(?string $bankLogin): void
+    {
+        $this->bankLogin = $bankLogin;
+    }
+
+    public function getBankPassword(): ?string
+    {
+        return $this->bankPassword;
+    }
+
+    public function setBankPassword(?string $bankPassword): void
+    {
+        $this->bankPassword = $bankPassword;
+    }
+
+    public function getDriver(): ?int
+    {
+        return $this->driver;
+    }
+
+    public function setDriver(?int $driver): void
+    {
+        $this->driver = $driver;
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace App\Infrastructure\Controller;
 
+use App\Domain\Repository\PaymentTypeRepository;
+use App\Domain\Repository\UserRepository;
 use App\Domain\Transform\PayTransformer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,13 +20,23 @@ class ApiController extends AbstractController
     #[Route('/api/pay', name: 'app_api_pay')]
     public function pay(
         Request $request,
-        PayTransformer $payTransformer
+        PayTransformer $payTransformer,
+        UserRepository $userRepository,
+        PaymentTypeRepository $paymentTypeRepository
     )
     {
         $payData = $payTransformer->transformObject(
             $request->request->all()
         );
 
-        return $this->json($payData);
+        $userData = $userRepository->getUserPaymentData($this->getUser()->getId());
+        $driver = $paymentTypeRepository->find($userData['driver']);
+        $driver = 'App\Application\Driver\\' . $driver->getDriver();
+
+        $driverAction = new $driver;
+        $driverAction->setEnvIronment($this->getParameter('kernel.environment'));
+        $out = $driverAction->pay($userData);
+
+        return $this->json($out);
     }
 }

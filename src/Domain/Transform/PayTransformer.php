@@ -15,7 +15,7 @@ class PayTransformer
         $dto->phone = ($payData['phone'] ?? false);
         $dto->sum = (float)($payData['sum'] ?? false);
         $dto->product = (string)($payData['product'] ?? false);
-        $dto->globalId = (int)($payData['globalId'] ?? false);
+        $dto->orderId = (int)($payData['orderId'] ?? false);
 
         return $dto;
     }
