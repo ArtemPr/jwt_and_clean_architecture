@@ -24,6 +24,9 @@ use Symfony\Component\HttpClient\HttpClient;
 class SberDriver implements DriverInterface
 {
     private $httpClient;
+
+    private int $orderSum = 0;
+
     public function __construct()
     {
         $this->httpClient = HttpClient::create();
@@ -37,11 +40,25 @@ class SberDriver implements DriverInterface
 
         $cart = $this->createCart(json_decode($param->cart, true));
 
+        $payVars = [
+            'userName' => $param->userName,
+            'password' => $param->password,
+            'orderNumber' => $param->orderNumber,
+            'orderBundle' => json_encode(
+                [
+                    'cartItems' => [
+                        'items' => $cart
+                    ]
+                ],
+        JSON_UNESCAPED_UNICODE
+            ),
+            'amount' => $this->orderSum,
+            'returnUrl' => $param->returnUrl,
+            'failUrl' => $param->failUrl,
+            'description' => $param->description
+        ];
 
-        dd($cart);
-        $sendResponse = $this->send($cart);
-
-        return $sendResponse;
+        return $this->send($payVars);
     }
 
     public function setEnvIronment(string $envIronment): void
@@ -52,6 +69,7 @@ class SberDriver implements DriverInterface
     private function createCart(array $param): array
     {
         $outArray = [];
+        $orderSum = 0;
         $index = 1;
         foreach ($param as $value) {
             $outArray[] = [
@@ -66,6 +84,7 @@ class SberDriver implements DriverInterface
                 'itemPrice' => $this->createPrice($value['productPrice']),
             ];
             $index++;
+            $this->orderSum += $this->createAmount($value['amount'], $value['productPrice']);
         }
 
         return $outArray;
@@ -78,7 +97,7 @@ class SberDriver implements DriverInterface
 
     private function createAmount(int $count, int $price): int
     {
-        return $count * ($this->createPrice($price));
+        return $count * $this->createPrice($price);
     }
 
     private function getPayUrl()
@@ -94,7 +113,7 @@ class SberDriver implements DriverInterface
     {
         $response = $this->httpClient->request(
             'GET',
-            $this->getPayUrl() . http_build_query($param),
+            $this->getPayUrl() . '?' . http_build_query($param),
             [
                 'verify_host' => false,
                 'verify_peer' => false

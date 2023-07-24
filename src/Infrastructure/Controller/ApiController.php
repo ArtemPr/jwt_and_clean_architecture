@@ -41,6 +41,10 @@ class ApiController extends AbstractController
         $driverAction->setEnvIronment($this->getParameter('kernel.environment'));
         $out = $driverAction->pay($payData);
 
-        return $this->json($out);
+        if (!empty($out['formUrl'])) {
+            return $this->redirect($out['formUrl']);
+        } else {
+            return $this->json($out);
+        }
     }
 }
