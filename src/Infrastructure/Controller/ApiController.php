@@ -25,17 +25,21 @@ class ApiController extends AbstractController
         PaymentTypeRepository $paymentTypeRepository
     )
     {
+        $userData = $userRepository->getUserPaymentData($this->getUser()->getId());
+
         $payData = $payTransformer->transformObject(
-            $request->request->all()
+            array_merge(
+                $request->request->all(),
+                $userData
+            )
         );
 
-        $userData = $userRepository->getUserPaymentData($this->getUser()->getId());
         $driver = $paymentTypeRepository->find($userData['driver']);
         $driver = 'App\Application\Driver\\' . $driver->getDriver();
 
         $driverAction = new $driver;
         $driverAction->setEnvIronment($this->getParameter('kernel.environment'));
-        $out = $driverAction->pay($userData);
+        $out = $driverAction->pay($payData);
 
         return $this->json($out);
     }

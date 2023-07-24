@@ -46,9 +46,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $data = $this->find($userId);
 
-        $out['BankLogin'] = $data->getBankLogin();
-        $out['BankPassword'] = $data->getBankPassword();
-        $out['SuccessUrl'] = $data->getSuccessUrl();
+        $out['userName'] = $data->getBankLogin();
+        $out['password'] = $data->getBankPassword();
+        $out['returnUrl'] = $data->getSuccessUrl();
         $out['failUrl'] = $data->getFailUrl();
         $out['driver'] = $data->getDriver();
 

@@ -15,7 +15,20 @@ class PayTransformer
         $dto->phone = ($payData['phone'] ?? false);
         $dto->sum = (float)($payData['sum'] ?? false);
         $dto->product = (string)($payData['product'] ?? false);
-        $dto->orderId = (int)($payData['orderId'] ?? false);
+        $dto->orderNumber = (int)($payData['orderNumber'] ?? false);
+
+        $dto->userName = (string)($payData['userName'] ?? false);
+        $dto->password = (string)($payData['password'] ?? false);
+        $dto->failUrl = (string)($payData['failUrl'] ?? false);
+        $dto->returnUrl = (string)($payData['returnUrl'] ?? false);
+        $dto->cart = (string)($payData['cart'] ?? false);
+        $dto->description = mb_substr(
+            (string)(
+                $payData['description'] ?? ''
+            ),
+            0,
+            24
+        );
 
         return $dto;
     }
