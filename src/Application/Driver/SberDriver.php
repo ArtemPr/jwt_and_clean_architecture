@@ -7,37 +7,22 @@ namespace App\Application\Driver;
 use App\Domain\DTO\PayDTO;
 use Symfony\Component\HttpClient\HttpClient;
 
-/**
- * https://3dsec.sberbank.ru/mportal3/admin/
-Логин: bakalavr-magistr-operator
-Пароль: bakalavr-magistr
-
-
-"auth_username" => "bakalavr-magistr-api",
-"auth_password" => "bakalavr-magistr",
-"callback_crypto_key" => "o2r1svuk3hlqrdtttr8ri18t5h"
-
-"3dsec.sberbank.ru" - тестовый урл
-"securepayments.sberbank.ru" - боевой урл
- */
-
 class SberDriver implements DriverInterface
 {
-    private $httpClient;
+    private HttpClient $httpClient;
 
     private int $orderSum = 0;
 
-    public function __construct()
+    private string|null $environment = null;
+
+    public function __construct(
+    )
     {
         $this->httpClient = HttpClient::create();
     }
 
-    private $envIronment = '';
-
     public function pay(PayDTO $param): array
     {
-        // @TODO work is here https://snipp.ru/php/sberbank-pay
-
         $cart = $this->createCart(json_decode($param->cart, true));
 
         $payVars = [
@@ -61,9 +46,9 @@ class SberDriver implements DriverInterface
         return $this->send($payVars);
     }
 
-    public function setEnvIronment(string $envIronment): void
+    public function setEnvironment(string $param): void
     {
-        $this->envIronment = $envIronment;
+        $this->environment = $param;
     }
 
     private function createCart(array $param): array
@@ -123,6 +108,7 @@ class SberDriver implements DriverInterface
         $statusCode = $response->getStatusCode();
         $content = $response->toArray();
         $content['status'] = $statusCode;
+
         return $content;
     }
 }

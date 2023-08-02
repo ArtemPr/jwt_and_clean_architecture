@@ -13,10 +13,7 @@ class PayTransformer
         $dto->email = ($payData['email'] ?? false);
         $dto->name = ($payData['name'] ?? false);
         $dto->phone = ($payData['phone'] ?? false);
-        $dto->sum = (float)($payData['sum'] ?? false);
-        $dto->product = (string)($payData['product'] ?? false);
         $dto->orderNumber = (int)($payData['orderNumber'] ?? false);
-
         $dto->userName = (string)($payData['userName'] ?? false);
         $dto->password = (string)($payData['password'] ?? false);
         $dto->failUrl = (string)($payData['failUrl'] ?? false);
@@ -29,7 +26,7 @@ class PayTransformer
             0,
             24
         );
-
+        $dto->clientId = (string)($payData['clientId'] ?? false);
         return $dto;
     }
 }

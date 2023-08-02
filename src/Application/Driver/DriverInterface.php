@@ -10,5 +10,5 @@ interface DriverInterface
 {
     public function pay(PayDTO $param): array;
 
-    public function setEnvIronment(string $param): void;
+    public function setEnvironment(string $param): void;
 }

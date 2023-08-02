@@ -9,9 +9,6 @@ class PayDTO
     #[Serializer\Type("string")]
     public ?string $orderNumber;
 
-    #[Serializer\Type("float")]
-    public ?float $sum;
-
     #[Serializer\Type("string")]
     public ?string $name;
 
@@ -20,10 +17,6 @@ class PayDTO
 
     #[Serializer\Type("string")]
     public ?string $email;
-
-    #[Serializer\Type("string")]
-    public ?string $product;
-
     #[Serializer\Type("string")]
     public ?string $userName;
 
@@ -41,4 +34,7 @@ class PayDTO
 
     #[Serializer\Type("string")]
     public ?string $cart;
+
+    #[Serializer\Type("string")]
+    public string $clientId;
 }
